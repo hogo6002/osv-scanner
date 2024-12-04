@@ -84,7 +84,8 @@ func extractArtifactDeps(extractPath string, layer *Layer) ([]*extractor.Invento
 			return nil, fmt.Errorf("(extracting as %s) %w", extractor.Name(), err)
 		}
 
-		for i := range newPackages {
+		for i, pkg := range newPackages {
+			fmt.Println("[extractArtifactDeps] newPackage: %#v\n", pkg)
 			newPackages[i].Extractor = extractor
 		}
 
@@ -101,6 +102,7 @@ func extractArtifactDeps(extractPath string, layer *Layer) ([]*extractor.Invento
 
 	// Perform any one-off translations here
 	for _, inv := range inventories {
+		fmt.Println("[extractArtifactDeps] inventories: %#v\n", inv)
 		// Scalibr uses go to indicate go compiler version
 		// We specifically cares about the stdlib version inside the package
 		// so convert the package name from go to stdlib

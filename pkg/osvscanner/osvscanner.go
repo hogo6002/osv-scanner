@@ -934,6 +934,10 @@ func DoScan(actions ScannerActions, r reporter.Reporter) (models.VulnerabilityRe
 		return models.VulnerabilityResults{}, NoPackagesFoundErr
 	}
 
+	for _, pkg := range scannedPackages {
+		fmt.Printf("Found package %#v\n", pkg)
+	}
+
 	filteredScannedPackagesWithoutUnscannable := filterUnscannablePackages(scannedPackages)
 
 	if len(filteredScannedPackagesWithoutUnscannable) != len(scannedPackages) {
@@ -1017,6 +1021,7 @@ func filterUnscannablePackages(packages []scannedPackage) []scannedPackage {
 			continue
 		}
 		out = append(out, p)
+		fmt.Println("out: %#v\n", p)
 	}
 
 	return out

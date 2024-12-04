@@ -34,7 +34,7 @@ const (
 	jitterMultiplier = 2
 )
 
-var RequestUserAgent = ""
+var RequestUserAgent = "docker-scan"
 
 // Package represents a package identifier for OSV.
 type Package struct {
@@ -180,8 +180,12 @@ func MakeRequest(request BatchedQuery) (*BatchedResponse, error) {
 // http client.
 func MakeRequestWithClient(request BatchedQuery, client *http.Client) (*BatchedResponse, error) {
 	// API has a limit of 1000 bulk query per request
+	for _, name := range request.Queries {
+		fmt.Printf("queries: %#v\n", name.Package)
+	}
 	queryChunks := chunkBy(request.Queries, maxQueriesPerRequest)
 	var totalOsvResp BatchedResponse
+
 	for _, queries := range queryChunks {
 		requestBytes, err := json.Marshal(BatchedQuery{Queries: queries})
 		if err != nil {

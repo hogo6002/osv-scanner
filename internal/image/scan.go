@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	"github.com/google/osv-scalibr/extractor"
+	"github.com/google/osv-scalibr/extractor/filesystem/os/dpkg"
 	"github.com/google/osv-scanner/internal/lockfilescalibr"
 	"github.com/google/osv-scanner/pkg/lockfile"
 	"github.com/google/osv-scanner/pkg/models"
@@ -81,9 +82,23 @@ func ScanImage(r reporter.Reporter, imagePath string) (ScanResults, error) {
 			}
 		}
 
+		name := i.Name
+		version := i.Version
+
+		if metadata, ok := i.Metadata.(*dpkg.Metadata); ok {
+			if metadata.SourceName != "" {
+				name = metadata.SourceName
+			}
+			if metadata.SourceVersion != "" {
+				version = metadata.SourceVersion
+			}
+		}
+
+		fmt.Printf("name: %s\n, version: %s", name, version)
+
 		pkg := lockfile.PackageDetails{
-			Name:      i.Name,
-			Version:   i.Version,
+			Name:      name,
+			Version:   version,
 			Ecosystem: lockfile.Ecosystem(i.Ecosystem()),
 			CompareAs: lockfile.Ecosystem(strings.Split(i.Ecosystem(), ":")[0]),
 		}
