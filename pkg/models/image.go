@@ -16,7 +16,7 @@ type ImageMetadata struct {
 }
 
 type BaseImageDetails struct {
-	Name string `json:"string"`
+	Name string `json:"name"`
 	// TODO: Not yet filled in
 	Tags []string `json:"tags"`
 }
