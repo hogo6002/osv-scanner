@@ -142,7 +142,10 @@ func printContainerScanningResult(result Result, outputWriter io.Writer, termina
 					}
 				}
 
-				layer := fmt.Sprintf("# %d Layer", pkg.LayerDetail.LayerIndex)
+				layer := "Unknown"
+				if pkg.LayerDetail.LayerInfo.LayerMetadata.DiffID != "" {
+					layer = fmt.Sprintf("# %d Layer", pkg.LayerDetail.LayerIndex)
+				}
 
 				inBaseImage := "False"
 				if pkg.LayerDetail.BaseImageInfo.Index != 0 {
